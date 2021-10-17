@@ -7,4 +7,5 @@ R: I will use a service with a high read performance such a redis or elastic sea
 # What is the runtime complexity of each function?
 # How does your code work?
 # What other approaches did you decide not to pursue?
+R: Using a heap sorted by máx frequency in root
 # How would you test this?

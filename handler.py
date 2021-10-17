@@ -1,8 +1,6 @@
 import random
 from structures import (
     NodeItem,
-    NodeHeap,
-    HeapTree,
     DoubleLinkedList,
 )
 import pdb
@@ -19,52 +17,47 @@ import pdb
 }'''
 
 ips = {}
-top100 = DoubleLinkedList()
-heap = HeapTree()
+MAX_LENGTH = 5
+top_ips = DoubleLinkedList(MAX_LENGTH)
 
 
 def request_handled(ip_address: str):
-    print(f'trying: {ip_address}')
+    print(f'receiving: {ip_address}')
     if ips.get(ip_address):
         data = ips[ip_address]
-        node_heap = heap.find_or_create_node(ips[ip_address])
         node_item = ips[ip_address]['node']
-        same_node_item = node_heap.ips.remove(node_item)
         ips[ip_address] = {
             'freq': data['freq'] + 1,
-            'node': same_node_item,
+            'node': node_item,
         }
-        node_heap = heap.find_or_create_node(node_heap, ips[ip_address])
-
-        added = node_heap.ips.add(ip_address, data['freq'] + 1)
-    else:
-        freq = 1  # first hit
-        node_heap = NodeHeap(freq)
-        node = NodeItem(ip_address, freq)
-        ips[ip_address] = {'freq': freq, 'node': node}
-        node_heap.ips.add(node)
-        heap.add()
-        print(node_heap.ips)
-    print(node)
+        add_text = top_ips.add(node_item)
+        node_item.data['freq'] = ips[ip_address]['freq']
+        print(add_text)
+        return
+    # new one
+    freq = 1  # first hit
+    node_item = NodeItem(ip_address, freq)
+    ips[ip_address] = {'freq': freq, 'node': node_item}
+    add_text = top_ips.add(node_item)
+    print(add_text)
 
 
 def top100():
-    pass
+    print('[\n' + ';\n'.join([v for v in top_ips]) + '\n]')
 
 
 def clear():
-    global ips, heap
+    global top_ips, ips
     ips = {}
-    heap = HeapTree()
+    top_ips = DoubleLinkedList(MAX_LENGTH)
 
 
 if __name__ == '__main__':
     # total_ips = 20_000_000
-    total_ips = 20
+    total_ips = 10
     for ip in range(total_ips):
-        octet = random.randint(1, 5)
+        octet = random.randint(1, 15)
         request_handled(f'1.1.1.{octet}')
-        input('next: ')
-        print(ips)
-
-
+        for k, v in ips.items():
+            print(f'ip: {k} -> freq: {v["freq"]}')
+    top100()
