@@ -43,13 +43,15 @@ def request_handled(ip_address: str):
 
 
 def top100():
-    print('[\n' + ';\n'.join([v for v in top_ips]) + '\n]')
+    tops = [v for v in top_ips]
+    print('[\n' + ';\n'.join(tops) + '\n]')
+    return tops
 
 
 def clear():
     global top_ips, ips
     ips = {}
-    top_ips = DoubleLinkedList(MAX_LENGTH)
+    top_ips.drop()
 
 
 if __name__ == '__main__':
